@@ -20,7 +20,7 @@ public class LuceneCleaner {
         TokenStream stream = null;
 
         try {
-            fullText = fullText.replaceAll("-+", "-0");
+            fullText = fullText.replaceAll("-+", " ");
 
             fullText = fullText.replaceAll("[\\p{Punct}&&[^'-]]+", "");
 
