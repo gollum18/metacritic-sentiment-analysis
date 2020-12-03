@@ -1,5 +1,3 @@
-package metacritic.hadoop;
-
 import com.mongodb.hadoop.MongoInputFormat;
 import com.mongodb.hadoop.MongoOutputFormat;
 import com.mongodb.hadoop.io.BSONWritable;

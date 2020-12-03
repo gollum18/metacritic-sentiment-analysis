@@ -1,5 +1,3 @@
-package metacritic.hadoop;
-
 import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.hadoop.io.MongoUpdateWritable;
 import org.apache.hadoop.io.NullWritable;

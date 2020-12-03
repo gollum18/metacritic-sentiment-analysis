@@ -1,5 +1,3 @@
-package metacritic.hadoop;
-
 import com.mongodb.hadoop.util.MongoTool;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.util.ToolRunner;
