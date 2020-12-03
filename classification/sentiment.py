@@ -44,25 +44,6 @@ def biased(x, mu, std):
         return False
 
 
-def map_sentiment(sentiment):
-    if sentiment == 'Very negative':
-        return -2
-    elif sentiment == 'Negative':
-        return -1
-    elif sentiment == 'Neutral':
-        return 0
-    elif sentiment == 'Positive':
-        return 1
-    elif sentiment == 'Very positive':
-        return 2
-    else:
-        return 0
-
-def convert_sentiments(sentiments):
-    import statistics
-    return statistics.mean(list(map(map_sentiment, sentiments)))
-
-
 # setup argparse
 parser = ap.ArgumentParser()
 parser.add_argument('mongo_uri', help='The MongoDB uri for the database server.')
@@ -80,8 +61,11 @@ critic_reviews = collection.find({})
 reviews_frame = pd.DataFrame(list(critic_reviews))
 
 # preprocess the dataset
-reviews_frame['sentiment_score'] = reviews_frame['snlp_sentiments'].apply(convert_sentiments)
+sscore_min = reviews_frame['sentiment_score'].min()
+sscore_max = reviews_frame['sentiment_score'].max()
 reviews_frame['grade'] = reviews_frame['grade'].apply(pd.to_numeric)
+reviews_frame['sentiment_score'] -= sscore_min
+reviews_frame['sentiment_score'] /= sscore_max
 
 # generate the reviews length field
 reviews_frame['review_length'] = reviews_frame['cleaned'].apply(lambda s : len(s.split(' ')))
@@ -105,7 +89,7 @@ train_y = train_df.iloc[:, -1:]
 test_x = test_df.iloc[:, :-1]
 test_y = test_df.iloc[:, -1:]
 
-num_features = ['sentiment_score', 'review_length', 'grade']
+num_features = ['review_length', 'grade']
 
 num_step = Pipeline(steps=[
         ('imputer', SimpleImputer(strategy='median')),
